@@ -3,7 +3,6 @@ import {withTracker} from "meteor/react-meteor-data";
 import {exampleApi} from "../../api/exampleApi";
 import SimpleForm from "../../../../ui/components/SimpleForm/SimpleForm";
 import SimpleImageUploadBase64 from "../../../../ui/components/ImageUpload/SimpleImageUploadBase64";
-import _ from 'lodash';
 import {Form,Container, Header,Button} from "semantic-ui-react";
 
 
@@ -28,7 +27,8 @@ const ExampleDetail = ({screenState,loading,exampleDoc,save,history}) => {
                 <SimpleImageUploadBase64
                     label={'Imagem'}
                     name={'image'}
-                    />
+                />
+
                 <Form.Group key={'fields'}>
                     <Form.Input
                         placeholder='Titulo'
@@ -39,6 +39,12 @@ const ExampleDetail = ({screenState,loading,exampleDoc,save,history}) => {
                         name='description'
                     />
                 </Form.Group>
+
+                <Form.Input
+                    placeholder='Contrato'
+                    name='contract'
+                />
+
                 <Form.Group key={'Buttons'}>
                     <Button content={screenState==='view'?'Voltar':'Cancelar'}
                             onClick={screenState==='edit'?()=>history.push(`/example/view/${exampleDoc._id}`):()=>history.push(`/example/list`)}

@@ -2,7 +2,8 @@ import React, { Component } from 'react'
 import { Form } from 'semantic-ui-react'
 import {hasValue, isBoolean} from "../../../libs/hasValue";
 import _ from 'lodash';
-import { Image,Message,Icon } from 'semantic-ui-react'
+import {Message,Icon } from 'semantic-ui-react'
+import SimpleSubForm from "/imports/ui/components/SimpleSubForm/SimpleSubForm";
 
 
 const FieldComponent = ({reactElement,name,...props}) => {
@@ -89,11 +90,19 @@ const FieldComponent = ({reactElement,name,...props}) => {
                 reactElement.props.onChange(e,field);
             }            
         }
-
-
-
     }
 
+    if(props.fieldSchema&&props.fieldSchema.subSchema){
+        return <SimpleSubForm
+            name={props.name}
+            value={value}
+            onChange={onChange}
+            error={error&&(!value||value.length===0)?true:undefined}
+            label={reactElement.props.label||(props.fieldSchema?props.fieldSchema.label:undefined)}
+            readOnly={mode==='view'}
+            subSchema={props.fieldSchema.subSchema}
+        />
+    }
     return (React.cloneElement(reactElement, { value, onChange,
             error:error&&(!value||value.length===0)?true:undefined,
             label:reactElement.props.label||(props.fieldSchema?props.fieldSchema.label:undefined),
@@ -143,7 +152,7 @@ class SimpleForm extends Component {
             });
             const newElement = React.cloneElement(element, { children: subElements })
             return newElement;
-        } else {
+        }  else {
             return <FieldComponent
                 name={element.props.name}
                 key={element.props.name?element.props.name:('el'+index)}

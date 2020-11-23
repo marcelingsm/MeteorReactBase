@@ -21,6 +21,26 @@ export const exampleSch = {
     optional: true,
 
   },
+  contract:{
+    type: [Object],
+    label: 'Contratos',
+    defaultValue: [],
+    optional: true,
+    subSchema: {
+      name: {
+        type: String,
+        label:'Nome',
+        defaultValue: '',
+        optional: false,
+      },
+      description: {
+        type: String,
+        label:'Descrição',
+        defaultValue: '',
+        optional: false,
+      },
+    }
+  },
 
 };
 
