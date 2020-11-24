@@ -2,9 +2,9 @@
 // Authentication errors modify the component’s state to be displayed
 import React from 'react'
 import PropTypes from 'prop-types'
-import { Meteor } from 'meteor/meteor'
-import { Container, Form, Grid, Header, Image, Message, Segment } from 'semantic-ui-react'
+import { Container, Form, Grid, Header, Image, Segment } from 'semantic-ui-react'
 import SimpleForm from "/imports/ui/components/SimpleForm/SimpleForm";
+import { Accounts } from 'meteor/accounts-base';
 
 export default class ResetPassword extends React.Component {
   onSubmit = doc => {

@@ -2,8 +2,8 @@ import ReactQuill, {Quill} from 'react-quill'; // ES6
 import './quill.snow.css';
 import React from "react";
 import {hasValue} from "../../../libs/hasValue";
-import { Button } from 'semantic-ui-react'
-.
+
+
 // configure Quill to use inline styles so the email's format properly
 var DirectionAttribute = Quill.import('attributors/attribute/direction');
 Quill.register(DirectionAttribute,true);
@@ -61,7 +61,7 @@ const modules = {
   };
  
 
-export default ({name,label,value,onChange,readOnly,error})=>{
+export default ({name,label,value,onChange,readOnly,error}:IBaseSimpleFormComponent)=>{
 
     if(!!readOnly) {
         return (<>

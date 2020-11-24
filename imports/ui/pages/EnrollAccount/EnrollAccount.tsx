@@ -1,12 +1,12 @@
 import React from 'react'
-import { Meteor } from 'meteor/meteor'
-import {Grid, Header, Image, Message} from 'semantic-ui-react'
+import { Header, Image, Message} from 'semantic-ui-react'
+import { Accounts } from 'meteor/accounts-base';
 
 let emailVerified = false;
-const EnrollAccount = (props) => {
+const EnrollAccount = (props:any) => {
 
     const [status,setStatus] = React.useState(null)
-    console.log('props',props);
+
     if(!status) {
         Accounts.verifyEmail(props.match.params.token, (err, res) => {
 
@@ -24,7 +24,7 @@ const EnrollAccount = (props) => {
                 },2000)
                 setStatus('Email verificado com sucesso! Redirecionando, aguarde....');
             }
-        }
+        })
     }
 
     return (

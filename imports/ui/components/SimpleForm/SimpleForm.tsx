@@ -5,8 +5,18 @@ import _ from 'lodash';
 import {Message,Icon } from 'semantic-ui-react'
 import SimpleSubForm from "/imports/ui/components/SimpleSubForm/SimpleSubForm";
 
+interface IFieldComponent {
+    reactElement:any;
+    name:string;
+    mode:string;
+    fieldSchema:object;
+    initialValue?:any;
+    setDoc: ({})=>any;
+    setFieldMethods: ({})=>any;
 
-const FieldComponent = ({reactElement,name,...props}) => {
+}
+
+const FieldComponent = ({reactElement,name,...props}:IFieldComponent) => {
     console.log('#',reactElement,'name',name,'>>>',props);
 
     const [error,setError] = React.useState(false)
@@ -30,7 +40,7 @@ const FieldComponent = ({reactElement,name,...props}) => {
     });
 
     props.setFieldMethods({
-        validateRequired: (hasError)=>{
+        validateRequired: (hasError:boolean)=>{
             if(hasError) {
                 setError(true);
                 return false;
@@ -48,7 +58,7 @@ const FieldComponent = ({reactElement,name,...props}) => {
             return true;
 
         },
-        setValue:(newValue)=>{
+        setValue:(newValue:any)=>{
             if(hasValue(newValue)) {
                 setValue(newValue);
                 return true;
@@ -56,7 +66,7 @@ const FieldComponent = ({reactElement,name,...props}) => {
             return false;
 
         },
-        setMode:(newMode)=>{
+        setMode:(newMode:string)=>{
             if(newMode!==mode) {
                 setMode(newMode);
                 return true;
@@ -67,7 +77,7 @@ const FieldComponent = ({reactElement,name,...props}) => {
 
 
 
-    const onChange = (e,fieldData={})=>{
+    const onChange = (e:React.BaseSyntheticEvent,fieldData={})=>{
         const field = {...(props.fieldSchema?props.fieldSchema:{}),...(e?e.target:{}),
         ...(fieldData&&fieldData.name?fieldData:{})};
 
@@ -112,7 +122,17 @@ const FieldComponent = ({reactElement,name,...props}) => {
         }))
 }
 
-class SimpleForm extends Component {
+interface ISimpleFormProps {
+    schema: [] | {};
+    onSubmit:() => void;
+    mode?:string;
+    children?:object[];
+    doc?:object;
+    loading?:boolean;
+    styles?:object;
+}
+
+class SimpleForm extends Component<ISimpleFormProps> {
 
     docValue = {};
     fields = {};
@@ -121,7 +141,7 @@ class SimpleForm extends Component {
     formElements:null,
     };
 
-    setDoc = (newDoc) => {
+    setDoc = (newDoc:object) => {
     this.docValue = {...this.docValue,...newDoc};
     }
 
@@ -130,7 +150,7 @@ class SimpleForm extends Component {
     }
 
     
-    wrapElement = (element,index) => {
+    wrapElement = (element,index:number) => {
         const self=this;
 
         if(!element.type) {
@@ -174,11 +194,11 @@ class SimpleForm extends Component {
         }
 
         let elements = React.Children.toArray(this.props.children);
-        const ListaOfElements = elements.map((element,index)=>{
+        const ListOfElements = elements.map((element,index)=>{
             return this.wrapElement(element,index)
         })
 
-        return ListaOfElements;
+        return ListOfElements;
 
     }
 

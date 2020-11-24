@@ -1,4 +1,3 @@
-import React from 'react';
 import ExampleContainer from '../ui/pages/exampleContainer';
 
 export const exampleRouterList = [

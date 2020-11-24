@@ -7,10 +7,10 @@ interface ISimpleSubFormProps {
     name:string;
     label:string;
     value:[];
+    subSchema:object;
     onChange: {(event: object, field: object): void };
     readOnly?:boolean;
     error?:boolean;
-    subSchema?:object;
 }
 
 interface ISimpleSubFormState {
@@ -34,6 +34,7 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
         if (!!this.props.value && !_.isEqual(this.props.value, prevProps.value) || !_.isEqual(this.props.value, this.state.subDoc)) {
             this.setState({subDoc: this.props.value})
         }
+
         return null;
     }
 
@@ -71,12 +72,12 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
         const{subSchema, label, readOnly} = this.props
 
         if (!!readOnly) {
-            return subDoc && subDoc.map(doc => {
+            return subDoc && subDoc.map((doc, index) => {
                 return (
-                    <div className="ui card">
+                    <div key={index} className="ui card">
                         {hasValue(label) ? (<label>{label}</label>) : null}
                         {subSchema && Object.keys(subSchema).map(schemaKey => {
-                            return hasValue(doc[schemaKey]) ? (<label>{doc[schemaKey]}</label>) : null
+                            return hasValue(doc[schemaKey]) ? (<label key={schemaKey}>{doc[schemaKey]}</label>) : null
                         })}
                     </div>
                 )
@@ -87,12 +88,13 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
         return (<>
                 <a onClick={this.onClickAddSubForm} style={{cursor: 'pointer'}}>{`Adicionar ${label}`}<br/></a>
                 {subDoc && subDoc.length > 0 &&
-                subDoc.map((doc: any) => {
+                subDoc.map((doc: any, index) => {
                     return (
-                        <>
+                        <div key={index}>
                             <i onClick={() => this.deleteSubForm(doc.id)} className="trash icon"/>
                             {subSchema && doc && Object.keys(subSchema).map((schemaKey:any) => {
                                 return <Form.Input
+                                    key={schemaKey}
                                     placeholder={subSchema[schemaKey]&& subSchema[schemaKey].label? subSchema[schemaKey].label: schemaKey }
                                     name={schemaKey}
                                     value={doc[schemaKey]? doc[schemaKey] : ''}
@@ -100,7 +102,7 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
                                 />
                             })
                             }
-                        </>)
+                        </div>)
                 })
                 }
             </>

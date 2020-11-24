@@ -1,11 +1,10 @@
-export const exampleSch = {
+export const exampleSch= {
   image: {
     type: String,
     label: 'Imagem',
     defaultValue: '',
     optional: true,
     isImage: true,
-    optional: true,
   },
   title: {
     type: String,
@@ -44,11 +43,12 @@ export const exampleSch = {
 
 };
 
-export interface example {
+export interface IExample {
   _id?: string;
   image: string;
   title: string;
   description: string;
+  contract: {name:string, description:string}[],
   createdat: Date;
   updatedat: Date;
   createdby: string;

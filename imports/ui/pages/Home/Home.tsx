@@ -1,6 +1,5 @@
 import React from 'react'
 import {Container, Divider, Grid, Header, Image, List, Segment} from 'semantic-ui-react'
-import {BrowserRouter as Router} from "react-router-dom";
 
 const Home = () => (
   <>

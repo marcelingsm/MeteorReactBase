@@ -1,8 +1,9 @@
 import React from 'react';
+import Meteor from 'meteor/meteor'
 import {ExampleListContainer} from "./exampleList";
 import {ExampleDetailContainer} from "./exampleDetail";
 
-export default props => {
+export default (props:any) => {
 
     const validState = [ 'view', 'edit', 'create' ];
 
@@ -14,7 +15,8 @@ export default props => {
     const id =
         props.match && props.match.params && !!props.match.params.exampleId
             ? props.match.params.exampleId
-            : Meteor.examplerId;
+            : Meteor.examplerId ? Meteor.examplerId
+            : undefined;
 
 
 

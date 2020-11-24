@@ -1,12 +1,17 @@
 import React from 'react'
 import { Table,Image,Button,Icon } from 'semantic-ui-react'
+interface ISimpleTable {
+    schema:object;
+    data:object[];
+    onClick:(event: React.SyntheticEvent,id:string,doc:object)=>void;
+    actions:object[];
+}
 
-
-export default function SimpleTable({schema,data,onClick,actions}) {
+export default function SimpleTable({schema,data,onClick,actions}:ISimpleTable) {
 
     const hasOnClick = !!onClick;
-    const handleRowClick = (id,doc) => (event) =>{
-        if(onClick) {
+    const handleRowClick = (id,doc) => (event: React.SyntheticEvent) =>{
+        if(hasOnClick) {
             onClick(event,id,doc);
         }
     }
