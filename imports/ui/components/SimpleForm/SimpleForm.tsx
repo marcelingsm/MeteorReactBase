@@ -11,7 +11,7 @@ interface IFieldComponent {
     mode:string;
     fieldSchema:object;
     initialValue?:any;
-    setDoc: ({})=>any;
+    setDoc: ({})=>void;
     setFieldMethods: ({})=>any;
 
 }
@@ -25,18 +25,13 @@ const FieldComponent = ({reactElement,name,...props}:IFieldComponent) => {
     const [changeByUser,setChangeByUser] = React.useState(false)
 
     React.useEffect(() => {
-        
-           if(!changeByUser&&!hasValue(value)&&!!hasValue(props.initialValue)) {
-                setValue(props.initialValue);
-            }
-
+        if(!changeByUser&&!hasValue(value)&&!!hasValue(props.initialValue)) {
+            setValue(props.initialValue);
+        }
 
         if(mode!==props.mode) {
             setMode(props.mode);
         }
-        
-        
-
     });
 
     props.setFieldMethods({
@@ -51,9 +46,17 @@ const FieldComponent = ({reactElement,name,...props}:IFieldComponent) => {
             if(!hasValue(value)) {
                 setError(true);
                 return false;
-            } else if(!!error) {
+            } else if(error) {
                 setError(true);
-                return true;
+                return false;
+            }
+            return true;
+
+        },
+        validateRequiredSubForm: ()=>{
+            if(error) {
+                setError(true);
+                return false;
             }
             return true;
 
@@ -101,13 +104,13 @@ const FieldComponent = ({reactElement,name,...props}:IFieldComponent) => {
             }            
         }
     }
-
     if(props.fieldSchema&&props.fieldSchema.subSchema){
         return <SimpleSubForm
             name={props.name}
             value={value}
+            error={error}
             onChange={onChange}
-            error={error&&(!value||value.length===0)?true:undefined}
+            setError={setError}
             label={reactElement.props.label||(props.fieldSchema?props.fieldSchema.label:undefined)}
             readOnly={mode==='view'}
             subSchema={props.fieldSchema.subSchema}
@@ -208,6 +211,9 @@ class SimpleForm extends Component<ISimpleFormProps> {
 
         if(this.props.schema) {
             Object.keys(this.fields).forEach(field=>{
+                if(this.props.schema[field]&&this.props.schema[field].subSchema&&!this.fields[field].validateRequiredSubForm()){
+                    fielsWithError.push(this.props.schema[field].label);
+                }
                 if(this.props.schema[field]&&!this.props.schema[field].optional&&!this.fields[field].validateRequired()) {
                     fielsWithError.push(this.props.schema[field].label);
                 }

@@ -1,5 +1,6 @@
 import React from "react";
-import FileInputComponent from 'react-file-input-previews-base64'
+// @ts-ignore
+import FileInputComponent from "react-file-input-previews-base64"
 import {Image} from "semantic-ui-react";
 import {hasValue} from "../../../libs/hasValue";
 

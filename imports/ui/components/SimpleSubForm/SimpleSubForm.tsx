@@ -8,6 +8,7 @@ interface ISimpleSubFormProps {
     label:string;
     value:[];
     subSchema:object;
+    setError:(isError:boolean)=> void;
     onChange: {(event: object, field: object): void };
     readOnly?:boolean;
     error?:boolean;
@@ -24,10 +25,34 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
     }
 
 
+    validateFields () {
+        this.props.setError(true)
+    }
+
     componentDidMount() {
         if (this.props.value) {
             this.setState({subDoc: this.props.value})
         }
+    }
+
+
+    validateSubForm (value:[], subSchema:object) {
+        let isError:boolean[] = [];
+        if(value&&value.length > 0){
+            value.map(field=> {
+                Object.keys(subSchema).map(keySchema => {
+                    if(subSchema[keySchema]&&subSchema[keySchema].optional){
+                        return isError.push(false);
+                    }else if(field[keySchema]&&field[keySchema].length > 0){
+                        return isError.push(false)
+                    }else{
+                        return isError.push(true)
+                    }
+                })
+            })
+        }
+        const error:boolean = isError.indexOf(true) !== -1
+        this.props.setError(error);
     }
 
     componentDidUpdate = (prevProps: ISimpleSubFormProps ) => {
@@ -35,12 +60,14 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
             this.setState({subDoc: this.props.value})
         }
 
+        this.validateSubForm( prevProps.value, this.props.subSchema )
         return null;
     }
 
     onClickAddSubForm = () => {
         const{subDoc} = this.state
         const{name, onChange} = this.props
+        this.validateFields();
         const number = Math.random()
         const id = number.toString(36).substr(2, 9);
         const newSubDoc = [...subDoc, {id: id}]
@@ -91,7 +118,7 @@ class  SimpleSubForm  extends Component<ISimpleSubFormProps, ISimpleSubFormState
                 subDoc.map((doc: any, index) => {
                     return (
                         <div key={index}>
-                            <i onClick={() => this.deleteSubForm(doc.id)} className="trash icon"/>
+                            <i onClick={() => this.deleteSubForm(doc.id)} style={{cursor: 'pointer'}} className="trash icon"/>
                             {subSchema && doc && Object.keys(subSchema).map((schemaKey:any) => {
                                 return <Form.Input
                                     key={schemaKey}

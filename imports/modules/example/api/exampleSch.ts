@@ -36,7 +36,7 @@ export const exampleSch= {
         type: String,
         label:'Descrição',
         defaultValue: '',
-        optional: false,
+        optional: true,
       },
     }
   },
